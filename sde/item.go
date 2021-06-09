@@ -20,13 +20,13 @@ type Item struct {
 	Produced      int
 }
 
-func GetItemByID(itemID int) (*Item, error) {
+func (s *SDE) GetItemByID(itemID int) (*Item, error) {
 	item, ok := getItemFromCache(fmt.Sprint(itemID))
 	if ok {
 		retItem := item.(Item)
 		return &retItem, nil
 	}
-	c := mustGetPoolConn()
+	c := s.mustGetPoolConn()
 	defer c.Release()
 	rows, err := c.Query(context.Background(), "select groupID, typeName, description, mass, volume, capacity, portionSize, marketGroupID, iconID, graphicID from invTypes where typeID = ?", itemID)
 	if err != nil {
@@ -46,13 +46,13 @@ func GetItemByID(itemID int) (*Item, error) {
 	return &retItem, nil
 }
 
-func GetItemByName(itemName string) (*Item, error) {
+func (s *SDE) GetItemByName(itemName string) (*Item, error) {
 	item, ok := getItemFromCache(itemName)
 	if ok {
 		retItem := item.(Item)
 		return &retItem, nil
 	}
-	c := mustGetPoolConn()
+	c := s.mustGetPoolConn()
 	defer c.Release()
 	rows, err := c.Query(context.Background(), "select groupID, typeName, description, mass, volume, capacity, portionSize, marketGroupID, iconID, graphicID from invTypes where typeName ilike ? limit 1 order by id desc", fmt.Sprintf("%%%v%%", itemName))
 	if err != nil {
