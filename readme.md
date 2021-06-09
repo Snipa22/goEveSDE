@@ -11,3 +11,5 @@ itself.
 The connections here are read only, and self-detach once they're done running in their various sub functions.  The main
 file is used for testing/example implementations and contains some envvars, documented below.  It does expect to have
 some access to a caching layer, it'll use an in-memory LRU by default.
+
+Small edit to re-push the repo onto public state
